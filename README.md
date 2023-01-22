@@ -1,6 +1,6 @@
 # hemovision-api
 
-Probably, i will follow this model: (Yes, it is be weird bc i didn't follow any pattern xD)
+Probably, i will follow this model: (Yes, it is be weird bc i didn't follow any pattern xD) Edit to see formatted
 
 User:
 	_id
