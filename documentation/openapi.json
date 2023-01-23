@@ -1,0 +1,793 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Hemovision - Documentation",
+    "version": "1.0",
+    "description": "Hemovision API\n",
+    "contact": {
+      "name": "Iaan Mesquita",
+      "url": "https://github.com/ianitow",
+      "email": "iaan.developer@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://hemovision.swagger.io/api/v1"
+    }
+  ],
+  "paths": {
+    "/user/logout": {
+      "get": {
+        "tags": ["User"],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "operationId": "logoutUser",
+        "summary": "Logs out current logged in user session",
+        "description": ""
+      }
+    },
+    "/user/login": {
+      "get": {
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "username",
+            "description": "The user name for login",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "password",
+            "description": "The password for login in clear text",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "headers": {
+              "X-Rate-Limit": {
+                "schema": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "description": "calls per hour allowed by the user"
+              },
+              "X-Expires-After": {
+                "schema": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "description": "date in UTC when token expires"
+              }
+            },
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid username/password supplied"
+          }
+        },
+        "operationId": "loginUser",
+        "summary": "Logs user into the system",
+        "description": ""
+      }
+    },
+    "/user/createWithList": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["User"],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          },
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "Successful operation"
+          }
+        },
+        "operationId": "createUsersWithListInput",
+        "summary": "Creates list of users with given input array",
+        "description": "Creates list of users with given input array"
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "username",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            },
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "operationId": "getUserByName",
+        "summary": "Get user by user name",
+        "description": ""
+      },
+      "put": {
+        "requestBody": {
+          "description": "Update an existent user in the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "username",
+            "description": "name that need to be deleted",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        },
+        "operationId": "updateUser",
+        "summary": "Update user",
+        "description": "This can only be done by the logged in user."
+      },
+      "delete": {
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "username",
+            "description": "The name that needs to be deleted",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "operationId": "deleteUser",
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user."
+      }
+    },
+    "/user": {
+      "post": {
+        "requestBody": {
+          "description": "Created user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": ["User"],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/UserCreatedResponse"
+          },
+          "500": {
+            "description": "Unexpected error"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "operationId": "createUser",
+        "summary": "Create user",
+        "description": ""
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "format": "uuid",
+            "type": "string",
+            "example": "3b241101-e2bb-4255-8caf-4136c566a962"
+          },
+          "fistName": {
+            "$ref": "#/components/schemas/User/properties/firstName",
+            "example": "John"
+          },
+          "lastName": {
+            "$ref": "#/components/schemas/User/properties/lastName",
+            "example": "John"
+          },
+          "avatarUri": {
+            "format": "url",
+            "type": "string"
+          },
+          "birthDate": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "backgroundUri": {
+            "format": "url",
+            "type": "string"
+          },
+          "jobDescription": {
+            "type": "string",
+            "example": "Biomedical at Federal University of Goiás"
+          },
+          "resume": {
+            "type": "string",
+            "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+          },
+          "language": {
+            "enum": ["GOOGLE_OAUTH", "APPLE_OAUTH"],
+            "type": "string",
+            "example": "pt-BR"
+          },
+          "countFollowers": {
+            "type": "integer",
+            "example": "145"
+          },
+          "countFollowing": {
+            "type": "integer",
+            "example": "321"
+          },
+          "countContributions": {
+            "type": "integer",
+            "example": "546"
+          },
+          "countPoints": {
+            "type": "integer",
+            "example": "123"
+          },
+          "socialContacts": {
+            "type": "object",
+            "properties": {
+              "facebookUrl": {
+                "type": "string"
+              },
+              "googleUrl": {
+                "type": "string"
+              },
+              "linkedinUrl": {
+                "type": "string"
+              }
+            }
+          },
+          "lastAchievements": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Achievement"
+            },
+            "example": "john@email.com"
+          },
+          "lastActivities": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Activity"
+            },
+            "example": "john@email.com"
+          },
+          "isDisabled": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "createdAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "updatedAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          }
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "Achievement": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": ["500_FOLLOWERS_X1312", "100_FOLLOWERS"],
+            "type": "string",
+            "example": "pt-BR"
+          },
+          "message": {
+            "description": "",
+            "type": "string"
+          },
+          "messageHtml": {
+            "description": "",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "updatedAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          }
+        }
+      },
+      "Notification": {
+        "description": "",
+        "type": "object"
+      },
+      "BloodType": {
+        "description": "",
+        "enum": [
+          "Monocytes",
+          "Lymphocytes",
+          "Neutrophils",
+          "Basophils",
+          "Eosinophils"
+        ],
+        "type": "string"
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "format": "uuid",
+            "type": "string",
+            "example": "3b241101-e2bb-4255-8caf-4136c566a962"
+          },
+          "ownerId": {
+            "$ref": "#/components/schemas/User/properties/_id",
+            "example": "9b30ff12-a2bb-c255-8caf-4136c566a962"
+          },
+          "imageUri": {
+            "format": "url",
+            "type": "string"
+          },
+          "description": {
+            "format": "url"
+          },
+          "countViews": {
+            "type": "integer",
+            "example": "145"
+          },
+          "countComments": {
+            "type": "integer",
+            "example": "321"
+          },
+          "viewed": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "fistName": {
+            "$ref": "#/components/schemas/User/properties/firstName",
+            "example": "John"
+          },
+          "lastName": {
+            "$ref": "#/components/schemas/User/properties/lastName",
+            "example": "John"
+          },
+          "birthDate": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "backgroundUri": {
+            "format": "url",
+            "type": "string"
+          },
+          "jobDescription": {
+            "type": "string",
+            "example": "Biomedical at Federal University of Goiás"
+          },
+          "resume": {
+            "type": "string",
+            "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+          },
+          "language": {
+            "enum": ["GOOGLE_OAUTH", "APPLE_OAUTH"],
+            "type": "string",
+            "example": "pt-BR"
+          },
+          "countPoints": {
+            "type": "integer",
+            "example": "123"
+          },
+          "surveyPredict": {
+            "type": "object",
+            "properties": {
+              "owner": {
+                "$ref": "#/components/schemas/BloodType"
+              },
+              "AI": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "$ref": "#/components/schemas/BloodType"
+                  },
+                  "percentage": {
+                    "type": "number"
+                  }
+                }
+              },
+              "users": {
+                "type": "object",
+                "properties": {
+                  "totalVotes": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "privacySettings": {
+            "type": "object",
+            "properties": {
+              "canSee": {
+                "enum": ["all", "nobody", "followers"],
+                "type": "string"
+              },
+              "canView": {
+                "enum": ["all", "nobody", "followers"],
+                "type": "string"
+              },
+              "canClassify": {
+                "enum": ["all", "nobody", "followers"],
+                "type": "string"
+              }
+            }
+          },
+          "isDisable": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "createdAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "updatedAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          }
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "Activity": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": ["COMMENT", "START_FOLLOWING"],
+            "type": "string",
+            "example": "COMMENT"
+          },
+          "message": {
+            "description": "",
+            "type": "string"
+          },
+          "messageHtml": {
+            "description": "",
+            "type": "string"
+          },
+          "postId": {
+            "$ref": "#/components/schemas/Post/properties/_id"
+          },
+          "createdAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "updatedAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          }
+        }
+      },
+      "PostComment": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "description": ""
+          },
+          "postId": {
+            "$ref": "#/components/schemas/Post/properties/_id",
+            "example": "9b30ff12-a2bb-c255-8caf-4136c566a962"
+          },
+          "userId": {
+            "$ref": "#/components/schemas/User/properties/_id",
+            "example": "9b30ff12-a2bb-c255-8caf-4136c566a962"
+          },
+          "message": {
+            "description": ""
+          },
+          "countLikes": {
+            "type": "integer"
+          },
+          "countComments": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "updatedAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "format": "uuid",
+            "type": "string",
+            "example": "3b241101-e2bb-4255-8caf-4136c566a962"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "format": "email",
+            "type": "string",
+            "example": "john@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "12345"
+          },
+          "socialToken": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "description": "type OAuth authentication of user",
+                "enum": ["GOOGLE_OAUTH", "APPLE_OAUTH"],
+                "type": "string"
+              },
+              "accessToken": {
+                "type": "string"
+              },
+              "idToken": {
+                "type": "string"
+              }
+            }
+          },
+          "isDisabled": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "createdAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          },
+          "updatedAt": {
+            "format": "date",
+            "type": "string",
+            "example": "2020-05-18T14:10:30Z"
+          }
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "UserId": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "format": "uuid",
+            "type": "string",
+            "example": "3b241101-e2bb-4255-8caf-4136c566a962"
+          }
+        }
+      }
+    },
+    "responses": {
+      "UserCreatedResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "format": "Bearer",
+                  "type": "string"
+                },
+                "userId": {
+                  "$ref": "#/components/schemas/User/properties/_id"
+                },
+                "firstName": {
+                  "$ref": "#/components/schemas/User/properties/firstName"
+                },
+                "lastName": {
+                  "$ref": "#/components/schemas/User/properties/lastName"
+                },
+                "email": {
+                  "$ref": "#/components/schemas/User/properties/email"
+                },
+                "createdAt": {
+                  "$ref": "#/components/schemas/User/properties/createdAt"
+                },
+                "updatedAt": {
+                  "$ref": "#/components/schemas/User/properties/updatedAt"
+                }
+              }
+            }
+          }
+        },
+        "description": "UserCreatedReponse"
+      }
+    },
+    "requestBodies": {
+      "UserArray": {
+        "description": "List of user object",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "authorization": {
+        "type": "apiKey",
+        "description": "Bearer Token",
+        "name": "authorization",
+        "in": "header"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "User",
+      "description": "Operations about user"
+    },
+    {
+      "name": "UserProfile",
+      "description": "Operations about UserProfile"
+    },
+    {
+      "name": "Achievement",
+      "description": ""
+    },
+    {
+      "name": "Activity",
+      "description": ""
+    },
+    {
+      "name": "Blood Cell Types",
+      "description": ""
+    },
+    {
+      "name": "Post",
+      "description": ""
+    },
+    {
+      "name": "Post Comment",
+      "description": ""
+    }
+  ],
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
