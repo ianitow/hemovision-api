@@ -1,0 +1,11 @@
+{
+  "name": "hemovision-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ianitow/hemovision-api.git",
+  "author": "ianitow <iaan.developer@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "git-commit-msg-linter": "^5.0.4"
+  }
+}
