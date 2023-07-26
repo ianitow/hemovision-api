@@ -1,3 +1,3 @@
 import config from './jest.config'
-config.testMatch = ['**/*.test.ts']
+config.testMatch = ['tests/**/*.test.ts']
 module.exports = config
