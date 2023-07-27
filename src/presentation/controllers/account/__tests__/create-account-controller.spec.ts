@@ -1,5 +1,5 @@
-import { MissingParamError } from "../../../errors/missing-param-error"
-import { CreateAccountController } from "../create-account-controller"
+import { CreateAccountController } from "../create-account-controller";
+import { MissingParamError } from './../../../errors/missing-param-error';
 
 interface SutTypes {
   sut: CreateAccountController
@@ -21,19 +21,24 @@ const makeSut = (): SutTypes => {
 describe('CreateAccountController', () => {
   test('Should return an error if no name is provided', async () => {
     const { sut } = makeSut()
-    const httpResponse =  sut.handle(mockRequest())
-    expect(httpResponse).toThrow()
+    const httpResponse =  sut.handle({
+      email: 'any_email',
+      password: 'any_password',
+      passwordConfirmation: 'any_password',
+      birthDate: 'any_birthDate'
+    })
+    
+    expect(httpResponse).rejects.toThrowError(new MissingParamError('name'))
   })
   test('Should return  an error if no email is provided', async () => {
     const { sut } = makeSut()
 
-    const httpResponse = await sut.handle({
+    const httpResponse =  sut.handle({
       name: 'any_name',
       password: 'any_password',
       passwordConfirmation: 'any_password',
       birthDate: 'any_birthDate'
     })
-    expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toThrow(new MissingParamError('email'))
+    expect(httpResponse).rejects.toThrow(new MissingParamError('email'))
   })
 })
