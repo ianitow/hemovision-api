@@ -6,19 +6,7 @@
 import type { Config } from 'jest'
 
 const config: Config = {
-  // All imported modules in your tests should be mocked automatically
-  // automock: false,
-
-  // Stop running tests after `n` failures
-  // bail: 0,
-
-  // The directory where Jest should store its cached dependency information
-  // cacheDirectory: "/tmp/jest_rs",
-
-  // Automatically clear mock calls, instances, contexts and results before every test
-  // clearMocks: false,
-
-  // Indicates whether the coverage information should be collected while executing the test
+  roots: ['<rootDir>/tests'],
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
 
@@ -127,9 +115,6 @@ const config: Config = {
   // rootDir: undefined,
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: [
-    '<rootDir>/tests'
-  ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",
@@ -178,7 +163,7 @@ const config: Config = {
   // A map from regular expressions to paths to transformers
   transform: {
     '.+\\.ts$': 'ts-jest'
-  }
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
@@ -196,7 +181,11 @@ const config: Config = {
   // watchPathIgnorePatterns: [],
 
   // Whether to use watchman for file crawling
-  // watchman: true,
+  // watchman: true
+  moduleNameMapper: {
+    '@/tests/(.*)': '<rootDir>/tests/$1',
+    '@/(.*)': '<rootDir>/src/$1'
+  }
 }
 
 export default config
