@@ -6,7 +6,7 @@
   "author": "ianitow <iaan.developer@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test": "jest --passWithNoTests --silent --noStackTrace",
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit-config.ts",
     "test:integration": "npm test -- --watch -c jest-integration-config.ts",
