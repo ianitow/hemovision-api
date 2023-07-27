@@ -13,4 +13,13 @@ describe('ValidationComposite', () => {
     })
     expect(error).toEqual(new MissingParamError('field_to_fail'))
   })
+  test('Should return the first error if more than one validations fails', () => {
+    const sut = new ValidationComposite([
+      new RequiredFieldValidation('any_field'),
+      new RequiredFieldValidation('field_to_fail')
+    ])
+    const error = sut.validate({
+    })
+    expect(error).toEqual(new MissingParamError('any_field'))
+  })
 })
