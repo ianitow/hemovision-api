@@ -16,6 +16,6 @@ describe('compare-field-validation', () => {
       any_field1: 'any_value',
       field_to_compare: 'different_value'
     })
-    expect(error).toBe(new InvalidParamError('field_to_compare'))
+    expect(error).toEqual(new InvalidParamError('field_to_compare'))
   })
 })

@@ -28,7 +28,7 @@ describe('CreateAccountController', () => {
       birthDate: 'any_birthDate'
     })
 
-    expect(httpResponse).rejects.toThrow(new MissingParamError('name'))
+    await expect(httpResponse).rejects.toThrow(new MissingParamError('name'))
   })
   test('Should throws an error if no email is provided', async () => {
     const { sut } = makeSut()
@@ -39,7 +39,7 @@ describe('CreateAccountController', () => {
       passwordConfirmation: 'any_password',
       birthDate: 'any_birthDate'
     })
-    expect(httpResponse).rejects.toThrow(new MissingParamError('email'))
+    await expect(httpResponse).rejects.toThrow(new MissingParamError('email'))
   })
   test('Should throws an error if no email is provided', async () => {
     const { sut } = makeSut()
@@ -50,6 +50,12 @@ describe('CreateAccountController', () => {
       passwordConfirmation: 'any_password',
       birthDate: 'any_birthDate'
     })
-    expect(httpResponse).rejects.toThrow(new MissingParamError('email'))
+    await expect(httpResponse).rejects.toThrow(new MissingParamError('email'))
+  })
+  test('Should returns 200 in all data is valid', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle(mockRequest())
+    expect(httpResponse.statusCode).toBe(200)
   })
 })

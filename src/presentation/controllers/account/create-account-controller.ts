@@ -7,7 +7,7 @@ export class CreateAccountController implements Controller {
     if (!request.email) throw new MissingParamError('email')
     if (!request.name) throw new MissingParamError('name')
     return {
-      statusCode: 400,
+      statusCode: 200,
       body: {}
 
     }
