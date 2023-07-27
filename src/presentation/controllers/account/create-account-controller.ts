@@ -1,19 +1,23 @@
 import { type CreateAccount } from '../../../domain/account/usecases/create-account'
-import { MissingParamError } from '../../errors/missing-param-error'
+import { type ValidationComposite } from '../../../validations/validators/validation-composite'
 import { badRequest, ok, serverError } from '../../helpers/http-helpers'
 import { type Controller } from '../../protocols/controller'
 import { type HttpResponse } from '../../protocols/http-response'
 
 export class CreateAccountController implements Controller {
   private readonly createAccount: CreateAccount
-  constructor (createAccount: CreateAccount) {
+  private readonly validatorComposite: ValidationComposite
+  constructor (createAccount: CreateAccount, validatorComposite: ValidationComposite) {
     this.createAccount = createAccount
+    this.validatorComposite = validatorComposite
   }
 
   async handle (request: any): Promise<HttpResponse> {
     try {
-      if (!request.email) return badRequest(new MissingParamError('email'))
-      if (!request.name) return badRequest(new MissingParamError('name'))
+      const error = this.validatorComposite.validate(request)
+      if (error) {
+        return badRequest(error)
+      }
       await this.createAccount.create(request)
 
       return ok(true)

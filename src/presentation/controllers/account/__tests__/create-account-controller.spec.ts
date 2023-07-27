@@ -1,11 +1,14 @@
 import { type CreateAccount } from '../../../../domain/account/usecases/create-account'
+import { ValidationComposite } from '../../../../validations/validators/validation-composite'
 import { badRequest, ok } from '../../../helpers/http-helpers'
+import { type Validation } from '../../../protocols/validation'
 import { MissingParamError } from './../../../errors/missing-param-error'
 import { CreateAccountController } from './../create-account-controller'
 
 interface SutTypes {
   sut: CreateAccountController
   createAccountStub: CreateAccount
+  validationCompositeStub: ValidationComposite
 }
 
 const mockRequest = (): any => ({
@@ -22,14 +25,30 @@ const makeSut = (): SutTypes => {
       return true
     }
   }
+  const mockValidation = (): Validation => {
+    class ValidationSpy implements Validation {
+      input: any
+      validate (input: any): Error | null {
+        this.input = input
+        return null
+      }
+    }
+    return new ValidationSpy()
+  }
+
   const createAccountStub = new CreateAccountStub()
-  const sut = new CreateAccountController(createAccountStub)
-  return { sut,createAccountStub }
+  const validationCompositeStub = new ValidationComposite([
+    mockValidation(),
+    mockValidation()
+  ])
+  const sut = new CreateAccountController(createAccountStub, validationCompositeStub)
+  return { sut, createAccountStub,validationCompositeStub }
 }
 
 describe('CreateAccountController', () => {
-  test('Should returns an error if no name is provided', async () => {
-    const { sut } = makeSut()
+  test('Should returns an error if Validations fails', async () => {
+    const { sut,validationCompositeStub } = makeSut()
+    jest.spyOn(validationCompositeStub,'validate').mockReturnValueOnce(new MissingParamError('any_field'))
     const httpResponse = await sut.handle({
       email: 'any_email',
       password: 'any_password',
@@ -37,19 +56,9 @@ describe('CreateAccountController', () => {
       birthDate: 'any_birthDate'
     })
 
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
   })
-  test('Should returns an error if no email is provided', async () => {
-    const { sut } = makeSut()
 
-    const httpResponse = await sut.handle({
-      name: 'any_name',
-      password: 'any_password',
-      passwordConfirmation: 'any_password',
-      birthDate: 'any_birthDate'
-    })
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
-  })
   test('Should returns 200 in all data is valid', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
