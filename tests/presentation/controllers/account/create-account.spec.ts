@@ -1,4 +1,4 @@
-import { CreateAccountController } from '../../../../src/presentation/controllers/create-account-controller'
+import { CreateAccountController } from '../../../../src/presentation/controllers/account/create-account-controller'
 
 interface SutTypes {
   sut: CreateAccountController
@@ -18,9 +18,10 @@ const makeSut = (): SutTypes => {
 }
 
 describe('CreateAccountController', () => {
-  test('Should return 400 if no name is provided', async () => {
+  test('Should return  if no name is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(mockRequest())
     expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new Error('Missing param: name'))
   })
 })
