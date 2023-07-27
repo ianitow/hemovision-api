@@ -10,13 +10,10 @@
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit-config.ts",
     "test:integration": "npm test -- --watch -c jest-integration-config.ts",
-    
     "test:staged": "npm test --findRelatedTests",
-    "test:ci":"npm test -- --coverage",
-
-     "prepare": "husky install"
+    "test:ci": "npm test -- --coverage",
+    "prepare": "husky install"
   },
-
   "devDependencies": {
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.5",

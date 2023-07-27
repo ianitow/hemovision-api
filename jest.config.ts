@@ -6,7 +6,7 @@
 import type { Config } from 'jest'
 
 const config: Config = {
-  roots: ['<rootDir>/tests'],
+  roots: ['<rootDir>/src'],
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
 
