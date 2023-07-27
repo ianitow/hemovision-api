@@ -1,5 +1,5 @@
-import { CreateAccountController } from "../create-account-controller";
-import { MissingParamError } from './../../../errors/missing-param-error';
+import { CreateAccountController } from '../create-account-controller'
+import { MissingParamError } from './../../../errors/missing-param-error'
 
 interface SutTypes {
   sut: CreateAccountController
@@ -19,21 +19,32 @@ const makeSut = (): SutTypes => {
 }
 
 describe('CreateAccountController', () => {
-  test('Should return an error if no name is provided', async () => {
+  test('Should throws an error if no name is provided', async () => {
     const { sut } = makeSut()
-    const httpResponse =  sut.handle({
+    const httpResponse = sut.handle({
       email: 'any_email',
       password: 'any_password',
       passwordConfirmation: 'any_password',
       birthDate: 'any_birthDate'
     })
-    
-    expect(httpResponse).rejects.toThrowError(new MissingParamError('name'))
+
+    expect(httpResponse).rejects.toThrow(new MissingParamError('name'))
   })
-  test('Should return  an error if no email is provided', async () => {
+  test('Should throws an error if no email is provided', async () => {
     const { sut } = makeSut()
 
-    const httpResponse =  sut.handle({
+    const httpResponse = sut.handle({
+      name: 'any_name',
+      password: 'any_password',
+      passwordConfirmation: 'any_password',
+      birthDate: 'any_birthDate'
+    })
+    expect(httpResponse).rejects.toThrow(new MissingParamError('email'))
+  })
+  test('Should throws an error if no email is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = sut.handle({
       name: 'any_name',
       password: 'any_password',
       passwordConfirmation: 'any_password',
