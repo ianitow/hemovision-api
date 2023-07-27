@@ -22,4 +22,15 @@ describe('ValidationComposite', () => {
     })
     expect(error).toEqual(new MissingParamError('any_field'))
   })
+  test('Should return null if the all validations passed', () => {
+    const sut = new ValidationComposite([
+      new RequiredFieldValidation('any_field'),
+      new RequiredFieldValidation('another_field')
+    ])
+    const error = sut.validate({
+      any_field: true,
+      another_field: true
+    })
+    expect(error).toBeNull()
+  })
 })
